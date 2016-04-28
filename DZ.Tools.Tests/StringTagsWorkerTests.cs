@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using DZ.Tools.Interfaces;
+using NUnit.Framework;
 
 namespace DZ.Tools.Tests
 {

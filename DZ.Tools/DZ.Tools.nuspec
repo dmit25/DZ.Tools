@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DZ.Tools</id>
+    <version>1.0</version>
+    <title>DZ.Tools</title>
+    <authors>Zobnin Dmitry</authors>
+    <owners>Zobnin Dmitry</owners>
+    <projectUrl>https://github.com/dmit25/DZ.Tools</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides a way to parse html or csv tagged corpuses. Provides methods to get analytics from corpuses comparison. For more information https://github.com/dmit25/DZ.Tools</description>
+    <releaseNotes>Initial release includes: csv, html parsers; html renderer; tags comparer with 3 comparison methods strict, lenient, semistrict; confusion matrix and matches/mismatches rendering</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>CRF, NER, comparison, comparer, markup, html, confusion matrix, quality, tag, tags</tags>
+  </metadata>
+</package>

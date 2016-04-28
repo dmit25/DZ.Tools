@@ -39,11 +39,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="DZ.Tools.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algo.cs" />
     <Compile Include="CsvCorpusParser.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="EnumsTagWorker.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HtmlCorpusParser.cs" />
     <Compile Include="HtmlRenderer.cs" />

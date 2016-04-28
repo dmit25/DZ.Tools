@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace DZ.Tools.Interfaces
 {
@@ -11,21 +12,25 @@ namespace DZ.Tools.Interfaces
         /// <summary>
         /// Tags renderer
         /// </summary>
+        [NotNull]
         HtmlRenderer<TType> Renderer { get; }
 
         /// <summary>
         /// Corpus parser
         /// </summary>
+        [NotNull]
         HtmlCorpusParser<TType> Parser { get; }
 
         /// <summary>
         /// Possible NER Values
         /// </summary>
+        [NotNull]
         List<TType> Values { get; }
 
         /// <summary>
         /// Default undefined value
         /// </summary>
+        [NotNull]
         TType Undefined { get; }
     }
 }

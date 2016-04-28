@@ -8,6 +8,8 @@ namespace DZ.Tools.Tests
     [TestFixture]
     public class QualityModelComparerTests
     {
+        private static readonly NERWorker Worker = new NERWorker();
+
         private static readonly List<Tag<TNER>> _Expected = new List<Tag<TNER>>
         {
             new Tag<TNER>(0, 4, TNER.P),
@@ -25,7 +27,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(15, 26, TNER.L),
                 new Tag<TNER>(30, 74, TNER.P),
                 new Tag<TNER>(64, 74, TNER.L),
-            }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, NERWorker.I.Values, NERWorker.I.Undefined);
+            }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, Worker.Values, Worker.Undefined);
             //no errors found
             report.Mismatches.All(e => e.Value.Count == 0).AssertTrue();
             report.Matches[TNER.U].Select(m => m.Actual.Score).Assert(Is.All.EqualTo(1));
@@ -40,7 +42,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(14,30,TNER.L),
                 new Tag<TNER>(50,74,TNER.P),
                 new Tag<TNER>(64,74,TNER.L),
-            }.CompareTo(_Expected, TagsMatchers<TNER>.Lenient, NERWorker.I.Values, NERWorker.I.Undefined);
+            }.CompareTo(_Expected, TagsMatchers<TNER>.Lenient, Worker.Values, Worker.Undefined);
             //no errors found
             report.Mismatches.Values.Assert(Is.All.Matches<List<Mismatch<TNER>>>(e => e.Count == 0));
             report.Matches[TNER.U].Select(m => m.Actual.Score).Assert(Is.All.EqualTo(1));
@@ -55,7 +57,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(14,30,TNER.L),
                 new Tag<TNER>(50,74,TNER.P),
                 new Tag<TNER>(64,74,TNER.L),
-            }.CompareTo(_Expected, TagsMatchers<TNER>.SemiStrict, NERWorker.I.Values, NERWorker.I.Undefined);
+            }.CompareTo(_Expected, TagsMatchers<TNER>.SemiStrict, Worker.Values, Worker.Undefined);
             //no errors found
             report.Mismatches.All(e => e.Value.Count == 0).AssertTrue();
             report.Matches[TNER.U][0].Actual.Score.AssertEqualTo(0.5);
@@ -71,7 +73,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(15,26,TNER.P), // new Tag<TNER>(15, 26, TNER.L), -- incorrect type 
                 new Tag<TNER>(30,74,TNER.P),//match
                 new Tag<TNER>(64,74,TNER.L),//match
-            }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, NERWorker.I.Values, NERWorker.I.Undefined);
+            }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, Worker.Values, Worker.Undefined);
             report.Render().ToConsole();
             var allErrors = report.Mismatches.SelectMany(p => p.Value).ToList();
             allErrors.Count.AssertEqualTo(2);
@@ -87,7 +89,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(10,30,TNER.P),
                 new Tag<TNER>(30,74,TNER.P),
                 new Tag<TNER>(64,74,TNER.L),
-            }.CompareTo(_Expected, TagsMatchers<TNER>.Lenient, NERWorker.I.Values, NERWorker.I.Undefined);
+            }.CompareTo(_Expected, TagsMatchers<TNER>.Lenient, Worker.Values, Worker.Undefined);
             //one entity missing other has different type
             var allErrors = report.Mismatches.SelectMany(p => p.Value).ToList();
             allErrors.Count.AssertEqualTo(2);
@@ -105,7 +107,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(30,74,TNER.P),
                 new Tag<TNER>(64,74,TNER.L),
                 new Tag<TNER>(75,80,TNER.L),
-            }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, NERWorker.I.Values, NERWorker.I.Undefined);
+            }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, Worker.Values, Worker.Undefined);
             //one error for 15-26 <> 15-20 another for 75-80 has no matches
             var allErrors = AllErrors(report);
             Console.WriteLine(report.Render());
@@ -197,13 +199,13 @@ namespace DZ.Tools.Tests
 
         private static TagsCorpus<TNER> GetReport(string etalon, string actual, out ComparisonReport<TNER> report)
         {
-            var m = NERWorker.I.Parser.Parse(etalon);
-            report = NERWorker.I.Parser.Parse(actual).Tags
+            var m = Worker.Parser.Parse(etalon);
+            report = Worker.Parser.Parse(actual).Tags
                 .CompareTo(
                     m.Tags,
                     TagsMatchers<TNER>.Lenient,
-                    NERWorker.I.Values,
-                    NERWorker.I.Undefined);
+                    Worker.Values,
+                    Worker.Undefined);
             return m;
         }
     }

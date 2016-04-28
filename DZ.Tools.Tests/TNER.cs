@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DZ.Tools.Interfaces;
 
 namespace DZ.Tools.Tests
 {
@@ -34,6 +31,25 @@ namespace DZ.Tools.Tests
         /// Location type
         /// </summary>
         L
+    }
+
+    /// <summary>
+    /// Contains invariants for NER primitives
+    /// </summary>
+    public class NERWorker : EnumsTagWorker<TNER>
+    {
+        /// <summary>
+        /// Creates new tags worker
+        /// </summary>
+        public NERWorker()
+            : base(TNER.U, (t1, t2) => t1.CompareTo(t2))
+        {
+            Types.Add("NAME", TNER.P);
+            Types.Add("ORG", TNER.O);
+            Types.Add("GEO", TNER.L);
+            Types.Add("ENTR", TNER.E);
+            Types.Add("PROD", TNER.R);
+        }
     }
 
     /// <summary>
@@ -76,84 +92,6 @@ namespace DZ.Tools.Tests
                     return TNER.U;
                 default:
                     throw new ArgumentException("Unknown type " + s);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Contains invariants for NER primitives
-    /// </summary>
-    public class NERWorker : ITagsWorker<TNER>
-    {
-        /// <summary>
-        /// Types mappings
-        /// </summary>
-        public static readonly Dictionary<string, TNER> Types = Enumers.GetEnumValuesDictionary<TNER>();
-        private static readonly Dictionary<TNER, string> _Strings = Enumers.GetEnumStringValuesDictionary<TNER>();
-        private static readonly HtmlRenderer<TNER> _Renderer = new HtmlRenderer<TNER>((e, s) => _Strings[e.Type], (x, y) => x.CompareTo(y));
-        private static readonly HtmlCorpusParser<TNER> _Parser = new HtmlEntitiesParser();
-        private static readonly List<TNER> _Values = Enumers.Values<TNER>();
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        public static readonly NERWorker I = new NERWorker();
-
-        static NERWorker()
-        {
-            Types.Add("NAME", TNER.P);
-            Types.Add("ORG", TNER.O);
-            Types.Add("GEO", TNER.L);
-            Types.Add("ENTR", TNER.E);
-            Types.Add("PROD", TNER.R);
-        }
-
-        /// <summary>
-        /// Tags renderer
-        /// </summary>
-        public HtmlRenderer<TNER> Renderer { get { return _Renderer; } }
-
-        /// <summary>
-        /// Corpus parser
-        /// </summary>
-        public HtmlCorpusParser<TNER> Parser { get { return _Parser; } }
-
-        /// <summary>
-        /// Possible NER Values
-        /// </summary>
-        public List<TNER> Values { get { return _Values; } }
-
-        /// <summary>
-        /// Default undefined value
-        /// </summary>
-        public TNER Undefined { get { return TNER.U; } }
-
-        /// <summary>
-        /// Parses entities from html corpus
-        /// </summary>
-        sealed class HtmlEntitiesParser : HtmlCorpusParser<TNER>
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="T:System.Object"/> class.
-            /// </summary>
-            public HtmlEntitiesParser()
-                : base(ParseType)
-            {
-            }
-
-            /// <summary>
-            /// Parses string into ner entity type
-            /// </summary>
-            /// <param name="tagBuilder"></param>
-            /// <returns></returns>
-            private static TNER ParseType(StringBuilder tagBuilder)
-            {
-                TNER res;
-                var tag = tagBuilder.ToString().Trim();
-                if (!Types.TryGetValue(tag, out res))
-                {
-                    throw new Exception("Unrecognized token:" + tag);
-                }
-                return res;
             }
         }
     }

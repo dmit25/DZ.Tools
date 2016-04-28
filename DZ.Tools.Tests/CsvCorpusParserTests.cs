@@ -6,6 +6,7 @@ namespace DZ.Tools.Tests
     [TestFixture]
     public class CsvCorpusParserTests
     {
+        private static readonly NERWorker Worker = new NERWorker();
         private static readonly HtmlRenderer<TNER> _Renderer = new HtmlRenderer<TNER>((t, s) => t.Type.ToString(), (t1, t2) => t1.CompareTo(t2));
 
         [Test]
@@ -66,7 +67,7 @@ Joke I-ORG
         {
             var parser = new CsvEntitiesParser();
             var c = parser.Parse(File.ReadAllText(@"C:\code\NLPGIT\Master\Sources\Release\corpus_s.txt"));
-            File.WriteAllText(@"E:\corpus2.txt", c.Render(NERWorker.I.Renderer));
+            File.WriteAllText(@"E:\corpus2.txt", c.Render(Worker.Renderer));
         }
     }
 }

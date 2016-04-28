@@ -8,7 +8,7 @@ namespace DZ.Tools
     /// <summary>
     /// Contains enumeration extension methods
     /// </summary>
-    public static class Enumers
+    internal static class Enumers
     {
         /// <summary>
         /// Returns dictionary fullfilled with enum values

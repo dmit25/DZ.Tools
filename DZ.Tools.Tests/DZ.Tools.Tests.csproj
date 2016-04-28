@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlgosTests.cs" />
+    <Compile Include="Examples.cs" />
     <Compile Include="HtmlParserTests.cs" />
     <Compile Include="CsvCorpusParserTests.cs" />
     <Compile Include="Extensions.cs" />
