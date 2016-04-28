@@ -16,6 +16,11 @@ namespace DZ.Tools
         private readonly List<string> _values;
         private readonly string _undefinedTagName;
 
+        /// <summary>
+        /// Creates new tags worker
+        /// </summary>
+        /// <param name="tagsNames">names of supported tags (should also contain undefined tag name)</param>
+        /// <param name="undefinedTagName">name of undefined tag</param>
         public StringTagsWorker(
             [NotNull] IEnumerable<string> tagsNames,
             [NotNull] string undefinedTagName)

@@ -2,6 +2,10 @@
 
 namespace DZ.Tools
 {
+    /// <summary>
+    /// Tags comparer interface 
+    /// </summary>
+    /// <typeparam name="TType"></typeparam>
     public interface ITagComparer<TType>
     {
         /// <summary>
@@ -10,11 +14,27 @@ namespace DZ.Tools
         double Compare(Tag<TType> x, Tag<TType> y);
     }
 
+    /// <summary>
+    /// Default tags matchers
+    /// </summary>
+    /// <typeparam name="TType"></typeparam>
     public static class TagsMatchers<TType>
     {
+        /// <summary>
+        /// Strict matcher strict begin-end congruence
+        /// </summary>
         public static readonly ITagComparer<TType> Strict = new StrictComparer();
+        /// <summary>
+        /// Matches two tags with equal type if any intersection was found
+        /// </summary>
         public static readonly ITagComparer<TType> Lenient = new LenientComparer();
+        /// <summary>
+        /// Uses strict macther if possible, else falls back to lenient matcher and if matches then returns 0.5 score
+        /// </summary>
         public static readonly ITagComparer<TType> SemiStrict = new SemiStrictComparer();
+        /// <summary>
+        /// Tag positions comparer
+        /// </summary>
         public static readonly IComparer<Tag<TType>> Pos = new PosComparer<TType>();
 
         private static bool HaveIntersection(Tag<TType> x, Tag<TType> y)

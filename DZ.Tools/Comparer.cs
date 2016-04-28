@@ -11,6 +11,16 @@ namespace DZ.Tools
     [PublicAPI]
     public static class Comparer
     {
+        /// <summary>
+        /// Comapres two lists of tags and creates comparison report
+        /// </summary>
+        /// <typeparam name="TType">Type of tag</typeparam>
+        /// <param name="actual">list of actual tags</param>
+        /// <param name="expected">list of etalon tags</param>
+        /// <param name="matcher">matcher that should be used during comparison. Default matchers could be found in <seealso cref="TagsMatchers{TType}"/></param>
+        /// <param name="values">Values of type <typeparamref name="TType"/> that should be found in tags</param>
+        /// <param name="undefined">So-called "NIL" or "UNDEFINED" type type for unmarked text or undefined tags</param>
+        /// <returns></returns>
         [NotNull]
         public static ComparisonReport<TType> CompareTo<TType>(
             [NotNull] this List<Tag<TType>> actual,

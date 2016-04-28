@@ -27,7 +27,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(64, 74, TNER.L),
             }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, NERWorker.I.Values, NERWorker.I.Undefined);
             //no errors found
-            report.Errors.All(e => e.Value.Count == 0).AssertTrue();
+            report.Mismatches.All(e => e.Value.Count == 0).AssertTrue();
             report.Matches[TNER.U].Select(m => m.Actual.Score).Assert(Is.All.EqualTo(1));
         }
 
@@ -42,7 +42,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(64,74,TNER.L),
             }.CompareTo(_Expected, TagsMatchers<TNER>.Lenient, NERWorker.I.Values, NERWorker.I.Undefined);
             //no errors found
-            report.Errors.Values.Assert(Is.All.Matches<List<Mismatch<TNER>>>(e => e.Count == 0));
+            report.Mismatches.Values.Assert(Is.All.Matches<List<Mismatch<TNER>>>(e => e.Count == 0));
             report.Matches[TNER.U].Select(m => m.Actual.Score).Assert(Is.All.EqualTo(1));
         }
 
@@ -57,7 +57,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(64,74,TNER.L),
             }.CompareTo(_Expected, TagsMatchers<TNER>.SemiStrict, NERWorker.I.Values, NERWorker.I.Undefined);
             //no errors found
-            report.Errors.All(e => e.Value.Count == 0).AssertTrue();
+            report.Mismatches.All(e => e.Value.Count == 0).AssertTrue();
             report.Matches[TNER.U][0].Actual.Score.AssertEqualTo(0.5);
             report.Matches[TNER.U][1].Actual.Score.AssertEqualTo(0.5);
         }
@@ -73,7 +73,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(64,74,TNER.L),//match
             }.CompareTo(_Expected, TagsMatchers<TNER>.Strict, NERWorker.I.Values, NERWorker.I.Undefined);
             report.Render().ToConsole();
-            var allErrors = report.Errors.SelectMany(p => p.Value).ToList();
+            var allErrors = report.Mismatches.SelectMany(p => p.Value).ToList();
             allErrors.Count.AssertEqualTo(2);
             allErrors[1].ExpectedType.AssertEqualTo(TNER.L);
             allErrors[1].ActualType.AssertEqualTo(TNER.P);
@@ -89,7 +89,7 @@ namespace DZ.Tools.Tests
                 new Tag<TNER>(64,74,TNER.L),
             }.CompareTo(_Expected, TagsMatchers<TNER>.Lenient, NERWorker.I.Values, NERWorker.I.Undefined);
             //one entity missing other has different type
-            var allErrors = report.Errors.SelectMany(p => p.Value).ToList();
+            var allErrors = report.Mismatches.SelectMany(p => p.Value).ToList();
             allErrors.Count.AssertEqualTo(2);
             allErrors[1].ExpectedType.AssertEqualTo(TNER.L);
             allErrors[1].ActualType.AssertEqualTo(TNER.P);
@@ -117,7 +117,7 @@ namespace DZ.Tools.Tests
 
         private static List<Mismatch<TType>> AllErrors<TType>(ComparisonReport<TType> report)
         {
-            var allErrors = report.Errors.SelectMany(p => p.Value).ToList();
+            var allErrors = report.Mismatches.SelectMany(p => p.Value).ToList();
             return allErrors;
         }
 
@@ -161,7 +161,7 @@ namespace DZ.Tools.Tests
             ComparisonReport<TNER> report;
             var m = GetReport(etalon, actual, out report);
             var errors = AllErrors(report);
-            errors.Count.AssertEqualTo(1, "Errors");
+            errors.Count.AssertEqualTo(1, "Mismatches");
             //<O>Ереванский НИИ математических машин</O> matches 2 tags <O>Ереванский</O> <O>НИИ</O>
             //handle it as a single match
             report.Matches[TNER.O].Count.AssertEqualTo(1);

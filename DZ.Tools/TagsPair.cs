@@ -2,8 +2,17 @@ using System;
 
 namespace DZ.Tools
 {
+    /// <summary>
+    /// Container for expected/actual tags pair
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class TagsPair<T> where T : class
     {
+        /// <summary>
+        /// Creates new pair
+        /// </summary>
+        /// <param name="expected"></param>
+        /// <param name="actual"></param>
         public TagsPair(
             T expected,
             T actual = null)
@@ -12,7 +21,13 @@ namespace DZ.Tools
             Actual = actual;
         }
 
+        /// <summary>
+        /// Expected tag
+        /// </summary>
         public T Expected { get; private set; }
+        /// <summary>
+        /// Actual tag
+        /// </summary>
         public T Actual { get; private set; }
 
         /// <summary>
@@ -22,8 +37,7 @@ namespace DZ.Tools
         /// <returns></returns>
         public string Render(Func<T, string> renderer)
         {
-            return string.Format(
-                "'{0}' <<>> '{1}'",
+            return "'{0}' <<>> '{1}'".FormatWith(
                 Expected == null ? Const.Null : Render(Expected, renderer),
                 Actual == null ? Const.Null : Render(Actual, renderer));
         }

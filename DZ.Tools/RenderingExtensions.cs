@@ -28,6 +28,13 @@ namespace DZ.Tools
                     report.RenderMismatches(tagRenderer));
         }
 
+        /// <summary>
+        /// Renders <paramref name="report"/>'s matches to string
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="report"></param>
+        /// <param name="tagRenderer"></param>
+        /// <returns></returns>
         public static string RenderMatches<TType>(
             this ComparisonReport<TType> report,
             Func<Tag<TType>, string> tagRenderer)
@@ -43,6 +50,13 @@ namespace DZ.Tools
                         (acc, t) => acc.AppendLine(t.Render(c => tagRenderer(c.Tag)))));
         }
 
+        /// <summary>
+        /// Renders <paramref name="report"/>'s mismatches to string
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="report"></param>
+        /// <param name="tagRenderer"></param>
+        /// <returns></returns>
         public static string RenderMismatches<TType>(
             this ComparisonReport<TType> report,
             Func<Tag<TType>, string> tagRenderer)
@@ -54,7 +68,7 @@ namespace DZ.Tools
 Expected  <<>>  Actual
 {0}"
                 .FormatWith(
-                report.Errors.Aggregate(
+                report.Mismatches.Aggregate(
                     new StringBuilder(),
                     (acc, t) =>
                     {

@@ -42,12 +42,12 @@ namespace DZ.Tools.Tests
             result.Render().ToConsole();
             //1) <a>4</a> expected but <cdf>4<cdf> was found
             //2) <a>5</a> expected but <null> was found
-            result.Errors["a"].Count.AssertEqualTo(2);
-            result.Errors["a"][0].ExpectedType.AssertEqualTo("a");
-            result.Errors["a"][0].ActualType.AssertEqualTo("cdf");
-            result.Errors["a"][1].ExpectedType.AssertEqualTo("a");
-            result.Errors["a"][1].ActualType.AssertEqualTo("u");
-            result.Errors["a"][1].Actual.AssertEqualTo(null);
+            result.Mismatches["a"].Count.AssertEqualTo(2);
+            result.Mismatches["a"][0].ExpectedType.AssertEqualTo("a");
+            result.Mismatches["a"][0].ActualType.AssertEqualTo("cdf");
+            result.Mismatches["a"][1].ExpectedType.AssertEqualTo("a");
+            result.Mismatches["a"][1].ActualType.AssertEqualTo("u");
+            result.Mismatches["a"][1].Actual.AssertEqualTo(null);
         }
     }
 }

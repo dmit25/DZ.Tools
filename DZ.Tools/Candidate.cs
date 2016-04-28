@@ -1,5 +1,9 @@
 ﻿namespace DZ.Tools
 {
+    /// <summary>
+    /// Match candidate class
+    /// </summary>
+    /// <typeparam name="TType"></typeparam>
     public class Candidate<TType>
     {
         /// <summary>
@@ -11,7 +15,13 @@
             Score = score;
         }
 
+        /// <summary>
+        /// Candidate tag
+        /// </summary>
         public Tag<TType> Tag { get; private set; }
+        /// <summary>
+        /// Candidate score
+        /// </summary>
         public double Score { get; set; }
 
         /// <summary>

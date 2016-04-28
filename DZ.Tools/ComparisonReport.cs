@@ -5,14 +5,24 @@ using System.Text;
 
 namespace DZ.Tools
 {
+    /// <summary>
+    /// Comaprison report that contains structured information about tags comparison
+    /// </summary>
+    /// <typeparam name="TType"></typeparam>
     public class ComparisonReport<TType>
     {
         private const string _IntFormat = "0000000";
         private const string _DoubleFormat = "0.00000";
         private const int _FieldWidth = 10;
         private readonly List<TType> _valuesSet;
+        /// <summary>
+        /// Undefined tag type value
+        /// </summary>
         public readonly TType Undefined;
 
+        /// <summary>
+        /// Creates new comparison report
+        /// </summary>
         public ComparisonReport(
             List<Match<TType>> matches,
             List<Mismatch<TType>> mismatch,
@@ -29,17 +39,32 @@ namespace DZ.Tools
             Spread(Relevant);
             Matches = Fill(() => new List<Match<TType>>(), matches);
             Spread(Matches);
-            Errors = Fill(() => new List<Mismatch<TType>>(), new List<Mismatch<TType>>());
-            Spread(Errors, mismatch);
+            Mismatches = Fill(() => new List<Mismatch<TType>>(), new List<Mismatch<TType>>());
+            Spread(Mismatches, mismatch);
             Statistics = Fill(() => new PrecRecall(), new PrecRecall());
             Fill(Statistics);
         }
 
+        /// <summary>
+        /// Per type Prec/Recall/F1 collection
+        /// </summary>
         public Dictionary<TType, PrecRecall> Statistics { get; private set; }
+        /// <summary>
+        /// Per type retrieved tags
+        /// </summary>
         public Dictionary<TType, List<Tag<TType>>> Retrieved { get; private set; }
+        /// <summary>
+        /// Per type relevant tags
+        /// </summary>
         public Dictionary<TType, List<Tag<TType>>> Relevant { get; private set; }
+        /// <summary>
+        /// Per type matches
+        /// </summary>
         public Dictionary<TType, List<Match<TType>>> Matches { get; private set; }
-        public Dictionary<TType, List<Mismatch<TType>>> Errors { get; private set; }
+        /// <summary>
+        /// Per expected type Mismatches
+        /// </summary>
+        public Dictionary<TType, List<Mismatch<TType>>> Mismatches { get; private set; }
 
         private Dictionary<TType, T> Fill<T>(Func<T> creator, T undefinedValue)
         {
@@ -59,6 +84,10 @@ namespace DZ.Tools
             return target;
         }
 
+        /// <summary>
+        /// Renders report to string
+        /// </summary>
+        /// <returns></returns>
         public string Render()
         {
             var res = new StringBuilder();
@@ -82,8 +111,8 @@ namespace DZ.Tools
                 .AppendLine(Relevant[Undefined].Count.ToString(_IntFormat));
             Append(res, Relevant);
             res.Append("===========Mismatches count:..............")
-                .AppendLine(Errors.Sum(p => p.Value.Count).ToString(_IntFormat));
-            Append(res, Errors, true);
+                .AppendLine(Mismatches.Sum(p => p.Value.Count).ToString(_IntFormat));
+            Append(res, Mismatches, true);
             return res.ToString();
         }
 
@@ -187,7 +216,7 @@ namespace DZ.Tools
                         table.Append(
                             coll.Equals(type)
                                 ? CellValue(Matches[coll].Count.ToString())
-                                : CellValue(Errors[coll].Count(e => e.ActualType.Equals(type)).ToString()));
+                                : CellValue(Mismatches[coll].Count(e => e.ActualType.Equals(type)).ToString()));
                     }
                     else
                     {
@@ -200,7 +229,7 @@ namespace DZ.Tools
             for (var j = 0; j < colls.Count; j++)
             {
                 var coll = colls[j];
-                table.Append(j != 0 ? CellValue(Errors[coll].Count.ToString()) : CellValue("All"));
+                table.Append(j != 0 ? CellValue(Mismatches[coll].Count.ToString()) : CellValue("All"));
             }
             table.AppendLine();
         }
@@ -222,6 +251,9 @@ namespace DZ.Tools
         }
     }
 
+    /// <summary>
+    /// Prec/Recall/F1 container
+    /// </summary>
     public class PrecRecall
     {
         /// <summary>
@@ -234,8 +266,17 @@ namespace DZ.Tools
             FMeasure = double.Epsilon;
         }
 
+        /// <summary>
+        /// Precision
+        /// </summary>
         public double Precision { get; set; }
+        /// <summary>
+        /// Recall
+        /// </summary>
         public double Recall { get; set; }
+        /// <summary>
+        /// F1 measure
+        /// </summary>
         public double FMeasure { get; set; }
     }
 }
