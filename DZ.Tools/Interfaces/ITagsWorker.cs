@@ -13,7 +13,7 @@ namespace DZ.Tools.Interfaces
         /// Tags renderer
         /// </summary>
         [NotNull]
-        HtmlRenderer<TType> Renderer { get; }
+        ITagsRenderer<TType> Renderer { get; }
 
         /// <summary>
         /// Corpus parser

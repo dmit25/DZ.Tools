@@ -46,7 +46,7 @@ namespace DZ.Tools
         /// <summary>
         /// Tags renderer
         /// </summary>
-        public HtmlRenderer<TType> Renderer { get { return _renderer; } }
+        public ITagsRenderer<TType> Renderer { get { return _renderer; } }
 
         /// <summary>
         /// Corpus parser
