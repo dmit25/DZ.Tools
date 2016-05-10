@@ -45,7 +45,10 @@ namespace DZ.Tools
 #####################################################################################################
 {0}"
                 .FormatWith(
-                    report.Matches[report.Undefined].Aggregate(
+                    report.Matches[report.Undefined]
+                    .OrderBy(p => p.Expected.Tag.Type)
+                    .ThenByDescending(p => p.Actual.Score)
+                    .Aggregate(
                         new StringBuilder(),
                         (acc, t) => acc.AppendLine(t.Render(c => tagRenderer(c.Tag)))));
         }
@@ -72,7 +75,7 @@ Expected  <<>>  Actual
                     new StringBuilder(),
                     (acc, t) =>
                     {
-                        foreach (var error in t.Value)
+                        foreach (var error in t.Value.OrderBy(m => m.ActualType))
                         {
                             acc.AppendLine(error.Render(tagRenderer));
                         }
