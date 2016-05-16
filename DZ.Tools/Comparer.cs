@@ -59,10 +59,19 @@ namespace DZ.Tools
                         bool counted = false;
                         foreach (var candidate in match)
                         {
-                            if (!counted && (tag.Parent != null && tag.Parent.Type.Equals(tag.Type) || !matched.Contains(candidate.Tag)))
+                            if (tag.Parent != null && tag.Parent.Type.Equals(tag.Type)
+                                || !matched.Contains(candidate.Tag))
                             {
-                                matches.Add(new Match<TType>(new Candidate<TType>(tag), match[0]));
-                                counted = true;
+                                if (!counted)
+                                {
+                                    matches.Add(new Match<TType>(new Candidate<TType>(tag), candidate));
+                                    counted = true;
+                                }
+                                else
+                                {
+                                    candidate.Score = 0;
+                                    matches.Add(new Match<TType>(new Candidate<TType>(tag), candidate));
+                                }
                             }
                             matched.Add(candidate.Tag);
                             retrievedHash.Add(candidate.Tag);

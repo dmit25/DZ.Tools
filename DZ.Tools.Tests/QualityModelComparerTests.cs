@@ -65,6 +65,25 @@ namespace DZ.Tools.Tests
         }
 
         [Test]
+        public void SemiStrictMultipleActualTagsResults()
+        {
+            var report = new List<Tag<TNER>>
+            {
+                new Tag<TNER>(0,10,TNER.P),
+                new Tag<TNER>(12,30,TNER.P),
+            }.CompareTo(new List<Tag<TNER>>
+            {
+                new Tag<TNER>(0,30,TNER.P)
+            }, TagsMatchers<TNER>.SemiStrict, Worker.Values, Worker.Undefined);
+            //no errors found
+            report.Mismatches.All(e => e.Value.Count == 0).AssertTrue();
+            report.Matches[TNER.P].Count.AssertEqualTo(2);
+            report.Matches[TNER.P][0].Actual.Score.AssertEqualTo(0.5);
+            report.Matches[TNER.P][1].Actual.Score.AssertEqualTo(0);
+            report.RenderMatchesAndMismatches(t => t.ToString()).ToConsole();
+        }
+
+        [Test]
         public void StrictTypeMismatchAndMissingEntity()
         {
             var report = new List<Tag<TNER>>
@@ -161,12 +180,12 @@ namespace DZ.Tools.Tests
             //expecting errors:
             //1) <O>Министерство обороны <G>Армении</G></O> is missing
             ComparisonReport<TNER> report;
-            var m = GetReport(etalon, actual, out report);
+            GetReport(etalon, actual, out report);
             var errors = AllErrors(report);
             errors.Count.AssertEqualTo(1, "Mismatches");
             //<O>Ереванский НИИ математических машин</O> matches 2 tags <O>Ереванский</O> <O>НИИ</O>
             //handle it as a single match
-            report.Matches[TNER.O].Count.AssertEqualTo(1);
+            report.Matches[TNER.O].Count(m => m.Actual.Score > 0).AssertEqualTo(1);
         }
 
         [Test]
@@ -178,9 +197,9 @@ namespace DZ.Tools.Tests
                 "законов <O>«О телекоммуникациях»</O> и <O>«О корпорации NTT»</O>";
             //if some actual tag covers 2 etalon tags then treats these 2 matches as single
             ComparisonReport<TNER> report;
-            var m = GetReport(etalon, actual, out report);
+            GetReport(etalon, actual, out report);
             AllErrors(report).Count.AssertEqualTo(0);
-            report.Matches[TNER.O].Count.AssertEqualTo(1);
+            report.Matches[TNER.O].Count(m => m.Actual.Score > 0).AssertEqualTo(1);
         }
 
         [Test]
@@ -192,9 +211,9 @@ namespace DZ.Tools.Tests
                 "<O>Government Public Key <O>Infrastructure</O></O>";
             //if some actual tag covers 2 etalon tags then treats these 2 matches as single
             ComparisonReport<TNER> report;
-            var m = GetReport(etalon, actual, out report);
+            GetReport(etalon, actual, out report);
             AllErrors(report).Count.AssertEqualTo(0);
-            report.Matches[TNER.O].Count.AssertEqualTo(2);
+            report.Matches[TNER.O].Count(m => m.Actual.Score > 0).AssertEqualTo(2);
         }
 
         private static TagsCorpus<TNER> GetReport(string etalon, string actual, out ComparisonReport<TNER> report)

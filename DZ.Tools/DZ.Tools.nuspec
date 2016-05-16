@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DZ.Tools</id>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <title>DZ.Tools</title>
     <authors>Zobnin Dmitry</authors>
     <owners>Zobnin Dmitry</owners>
@@ -12,6 +12,7 @@
     <releaseNotes>
       Initial release includes: csv, html parsers; html renderer; tags comparer with 3 comparison methods strict, lenient, semistrict; confusion matrix and matches/mismatches rendering
       10.05.16: Matches mismatches additional ordering
+      16.05.16: Hidden semistrict matches now appear as macthes with zero score
     </releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>CRF, NER, comparison, comparer, markup, html, confusion matrix, quality, tag, tags, dz, tools, dz.tools</tags>
