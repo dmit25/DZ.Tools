@@ -6,7 +6,7 @@
     <title>DZ.Tools</title>
     <authors>Zobnin Dmitry</authors>
     <owners>Zobnin Dmitry</owners>
-    <icon>https://raw.githubusercontent.com/dmit25/DZ.Tools/master/Icons/morphology.png</icon>
+    <iconUrl>https://raw.githubusercontent.com/dmit25/DZ.Tools/master/Icons/morphology64.png</iconUrl>
     <projectUrl>https://github.com/dmit25/DZ.Tools</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provides a way to parse html or csv tagged corpuses and get confusion matrix from corpuses comparison. For more information https://github.com/dmit25/DZ.Tools </description>
