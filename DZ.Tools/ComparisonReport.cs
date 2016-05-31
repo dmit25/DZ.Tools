@@ -13,7 +13,6 @@ namespace DZ.Tools
     {
         private const string _IntFormat = "0000000";
         private const string _DoubleFormat = "0.00000";
-        private const int _FieldWidth = 10;
         private readonly List<TType> _valuesSet;
         /// <summary>
         /// Undefined tag type value
@@ -88,35 +87,35 @@ namespace DZ.Tools
         /// Renders report to string
         /// </summary>
         /// <returns></returns>
-        public string Render()
+        public string Render(int maxWidth = 10)
         {
             var res = new StringBuilder();
-            AppendConfusionMatrix(res);
+            AppendConfusionMatrix(res, maxWidth);
             res.Append("===================FMeasure:..............")
                 .AppendLine(Statistics[Undefined].FMeasure.ToString(_DoubleFormat));
-            Append(res, Statistics, s => s.FMeasure);
+            Append(res, Statistics, s => s.FMeasure, maxWidth);
             res.Append("==================Precision:..............")
                 .AppendLine(Statistics[Undefined].Precision.ToString(_DoubleFormat));
-            Append(res, Statistics, s => s.Precision);
+            Append(res, Statistics, s => s.Precision, maxWidth);
             res.Append("=====================Recall:..............")
                 .AppendLine(Statistics[Undefined].Recall.ToString(_DoubleFormat));
-            Append(res, Statistics, s => s.Recall);
+            Append(res, Statistics, s => s.Recall, maxWidth);
             res.Append("==============Matches count:..............")
                 .AppendLine(Matches[Undefined].Count.ToString(_IntFormat));
-            Append(res, Matches);
+            Append(res, Matches, maxWidth);
             res.Append("============Retrieved count:..............")
                 .AppendLine(Retrieved[Undefined].Count.ToString(_IntFormat));
-            Append(res, Retrieved);
+            Append(res, Retrieved, maxWidth);
             res.Append("=============Relevant count:..............")
                 .AppendLine(Relevant[Undefined].Count.ToString(_IntFormat));
-            Append(res, Relevant);
+            Append(res, Relevant, maxWidth);
             res.Append("===========Mismatches count:..............")
                 .AppendLine(Mismatches.Sum(p => p.Value.Count).ToString(_IntFormat));
-            Append(res, Mismatches, true);
+            Append(res, Mismatches, maxWidth, true);
             return res.ToString();
         }
 
-        private void Append<T>(StringBuilder res, Dictionary<TType, T> source, Func<T, double> selector)
+        private void Append<T>(StringBuilder res, Dictionary<TType, T> source, Func<T, double> selector, int maxWidth)
         {
             foreach (var pair in source)
             {
@@ -124,14 +123,14 @@ namespace DZ.Tools
                 {
                     res
                         .Append("*****************")
-                        .Append(StringValue(pair.Key.ToString()))
+                        .Append(StringValue(pair.Key.ToString(), maxWidth))
                         .Append(":..............")
                         .AppendLine(selector(pair.Value).ToString(_DoubleFormat));
                 }
             }
         }
 
-        private void Append<T>(StringBuilder res, Dictionary<TType, List<T>> source, bool appendUndefined = false)
+        private void Append<T>(StringBuilder res, Dictionary<TType, List<T>> source, int maxWidth, bool appendUndefined = false)
         {
             foreach (var pair in source)
             {
@@ -139,7 +138,7 @@ namespace DZ.Tools
                 {
                     res
                         .Append("*****************")
-                        .Append(StringValue(pair.Key.ToString()))
+                        .Append(StringValue(pair.Key.ToString(), maxWidth))
                         .Append(":..............")
                         .AppendLine(pair.Value.Count.ToString(_IntFormat));
                 }
@@ -189,7 +188,7 @@ namespace DZ.Tools
 
         private double Score(List<Match<TType>> list) { return list.Sum(m => m.Actual.Score) + double.Epsilon; }
 
-        private void AppendConfusionMatrix(StringBuilder table)
+        private void AppendConfusionMatrix(StringBuilder table, int maxWidth)
         {
             //preparing columns: First is undefined (fake column for names), then <v1> <v2> ...
             var colls = _valuesSet.Where(v => !v.Equals(Undefined)).ToList();
@@ -201,7 +200,7 @@ namespace DZ.Tools
 
             for (var i = 0; i < colls.Count; i++)
             {
-                table.Append(i != 0 ? CellValue(colls[i].ToString()) : CellValue(@"Act\Exp"));
+                table.Append(i != 0 ? CellValue(colls[i].ToString(), maxWidth) : CellValue(@"Act\Exp", maxWidth));
             }
             table.AppendLine();
 
@@ -215,12 +214,12 @@ namespace DZ.Tools
                     {
                         table.Append(
                             coll.Equals(type)
-                                ? CellValue(Matches[coll].Count.ToString())
-                                : CellValue(Mismatches[coll].Count(e => e.ActualType.Equals(type)).ToString()));
+                                ? CellValue(Matches[coll].Count.ToString(), maxWidth)
+                                : CellValue(Mismatches[coll].Count(e => e.ActualType.Equals(type)).ToString(), maxWidth));
                     }
                     else
                     {
-                        table.Append(CellValue(type.ToString()));
+                        table.Append(CellValue(type.ToString(), maxWidth));
                     }
                 }
                 table.AppendLine();
@@ -229,21 +228,24 @@ namespace DZ.Tools
             for (var j = 0; j < colls.Count; j++)
             {
                 var coll = colls[j];
-                table.Append(j != 0 ? CellValue(Mismatches[coll].Count.ToString()) : CellValue("All"));
+                table.Append(j != 0 ? CellValue(Mismatches[coll].Count.ToString(), maxWidth) : CellValue("All", maxWidth));
             }
             table.AppendLine();
         }
 
-        private static string CellValue(string content) { return Const.SpaceS + StringValue(content) + Const.SpaceS; }
-
-        private static string StringValue(string content)
+        private static string CellValue(string content, int maxWidth)
         {
-            if (content.Length >= _FieldWidth)
+            return Const.SpaceS + StringValue(content, maxWidth) + Const.SpaceS;
+        }
+
+        private static string StringValue(string content, int maxWidth)
+        {
+            if (content.Length >= maxWidth)
             {
-                return content.Substring(0, _FieldWidth);
+                return content.Substring(0, maxWidth);
             }
             var len = content.Length;
-            for (var i = 0; i < _FieldWidth - len; i++)
+            for (var i = 0; i < maxWidth - len; i++)
             {
                 content = Const.SpaceS + content;
             }
