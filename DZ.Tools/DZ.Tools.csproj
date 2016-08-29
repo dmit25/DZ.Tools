@@ -40,6 +40,7 @@
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
     <None Include="DZ.Tools.nuspec" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algo.cs" />
@@ -53,7 +54,6 @@
     <Compile Include="Interfaces\ITagsRenderer.cs" />
     <Compile Include="Interfaces\ITagsWorker.cs" />
     <Compile Include="ModelParsingException.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Candidate.cs" />
     <Compile Include="Comparer.cs" />
     <Compile Include="ComparisonReport.cs" />
@@ -68,6 +68,12 @@
     <Compile Include="TagsCorpus.cs" />
     <Compile Include="TagsMatchers.cs" />
     <Compile Include="TagsPair.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations.PCL328, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.PCL328.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
