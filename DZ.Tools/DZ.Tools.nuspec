@@ -20,7 +20,7 @@
     <copyright>Copyright 2016</copyright>
     <tags>CRF, NER, comparison, comparer, markup, html, confusion matrix, quality, tag, tags, dz, tools, dz.tools</tags>
     <dependencies>
-      <dependency id="JetBrains.Annotations" version="10.1.5"/>
+      <dependency id="JetBrains.Annotations" version="2021.1.0"/>
     </dependencies>
   </metadata>
 </package>
