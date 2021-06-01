@@ -4,6 +4,24 @@
     <OutputType>Library</OutputType>
     <DefaultLanguage>en-US</DefaultLanguage>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>DZ.Tools</PackageId>
+    <Version>1.1.19</Version>
+    <Authors>Zobnin Dmitry</Authors>
+    <Description>Provides a way to parse html or csv tagged corpuses and get confusion matrix from corpuses comparison. For more information https://github.com/dmit25/DZ.Tools</Description>
+    <PackageIconUrl>https://raw.githubusercontent.com/dmit25/DZ.Tools/master/Icons/morphology64.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/dmit25/DZ.Tools</PackageProjectUrl>
+    <PackageReleaseNotes>
+      Initial release includes: csv, html parsers; html renderer; tags comparer with 3 comparison methods strict, lenient, semistrict; confusion matrix and matches/mismatches rendering
+      10.05.16: Matches mismatches additional ordering
+      16.05.16: Hidden semistrict matches now appear as macthes with zero score
+      31.05.16: Configurable Field size for report render method
+      29.08.16: Annotations now consumed from nuget
+    </PackageReleaseNotes>
+    <PackageTags>CRF, NER, comparison, comparer, markup, html, confusion matrix, quality, tag, tags, dz, tools, dz.tools</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\DZ.Tools.XML</DocumentationFile>
